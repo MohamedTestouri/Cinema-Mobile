@@ -15,14 +15,15 @@ public class Planning {
     public Planning() {
     }
 
-    public Planning(int id, String typeEvent, String titreEvent, String nomSalle) {
+    public Planning(int id, String titreEvent, String typeEvent,  String nomSalle, Date date) {
+        this.date = date;
         this.id = id;
         this.typeEvent = typeEvent;
         this.titreEvent = titreEvent;
         this.nomSalle = nomSalle;
     }
 
-    public Planning(int id, Date date, Time heureDebut, Time heureFin, String typeEvent, String titreEvent, String nomSalle) {
+    public Planning(int id, String typeEvent, String titreEvent, String nomSalle, Date date, Time heureDebut, Time heureFin) {
         this.id = id;
         this.date = date;
         this.heureDebut = heureDebut;

@@ -3,11 +3,14 @@ package tn.esprit.pidev.views;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.spinner.Picker;
+import com.codename1.ui.spinner.TimeSpinner;
 import tn.esprit.pidev.entities.Planning;
 import tn.esprit.pidev.services.PlanningService;
 import tn.esprit.pidev.services.SalleService;
 import tn.esprit.pidev.services.SpectacleService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,7 +35,7 @@ public class AdminEditPlanning extends Form {
         titrePicker.setStrings(titreData);
         titrePicker.setSelectedString(titreData[0]); //GET THE FIRST ELEMENT
 
-        TextField typeTextField = new TextField("", "Type Event");
+        TextField typeTextField = new TextField(planning.getTypeEvent(), "Type Event");
 
         // FILL THE PICKER WITH SALLE NAME
         String[] salleNameData = new String[salleService.showAll().size()];
@@ -45,24 +48,33 @@ public class AdminEditPlanning extends Form {
         //DATE PICKER
         Picker datePicker = new Picker();
         datePicker.setType(Display.PICKER_TYPE_DATE);
-        datePicker.setDate(new Date());
+        datePicker.setDate(planning.getDate());
         //TIME PICKER
         Picker heureDebutPicker = new Picker();
         heureDebutPicker.setType(Display.PICKER_TYPE_TIME);
-        heureDebutPicker.setTime(10 * 60);
+
+        heureDebutPicker.setTime(Integer.parseInt(planning.getHeureDebut().toString().substring(0, 2)), Integer.parseInt(planning.getHeureDebut().toString().substring(3, 5)));
         //TIME PICKER
         Picker heureFinPicker = new Picker();
         heureFinPicker.setType(Display.PICKER_TYPE_TIME);
-        heureFinPicker.setTime(10 * 60);
+        heureFinPicker.setTime(Integer.parseInt(planning.getHeureFin().toString().substring(0, 2)), Integer.parseInt(planning.getHeureFin().toString().substring(3, 5)));
         Button editButton = new Button("Edit The Planning");
         Button deleteButton = new Button("Delete The Planning");
         editButton.addActionListener(l -> {
             if (typeTextField.getText().length() == 0) {
                 Dialog.show("Alert", "Please fill all the fields", new Command("OK"));
             } else {
-                // Spectacle spectacle = new Spectacle(titreTextField.getText(), datePicker.getDate(), genreTextField.getText(), imageTextField.getText());
-                //System.out.println(datePicker.getDate().toString());
-                previous.showBack();
+                try {
+                    planning.setDate((java.sql.Date) datePicker.getDate());
+                    planning.setHeureDebut(new java.sql.Time(new SimpleDateFormat("HH:mm").parse(heureDebutPicker.getTime() / 60 + ":" + heureDebutPicker.getTime() % 60).getTime()));
+                    planning.setHeureFin(new java.sql.Time(new SimpleDateFormat("HH:mm").parse(heureFinPicker.getTime() / 60 + ":" + heureFinPicker.getTime() % 60).getTime()));
+                    planning.setNomSalle(sallePicker.getSelectedString());
+                    planning.setTypeEvent(typeTextField.getText());
+                    planning.setTitreEvent(titrePicker.getSelectedString());
+                    previous.showBack();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
         });
         deleteButton.addActionListener(l -> {

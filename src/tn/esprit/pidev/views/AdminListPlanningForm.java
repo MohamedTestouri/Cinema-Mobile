@@ -26,8 +26,10 @@ public class AdminListPlanningForm extends Form {
         container.setScrollableY(true);
         for (Planning planning : planningArrayList) {
             MultiButton multiButton = new MultiButton(planning.getTitreEvent() + "");
-            multiButton.setTextLine2(planning.getTypeEvent() + "");
-            multiButton.setTextLine3(planning.getNomSalle() + "");
+            multiButton.setTextLine4(planning.getTypeEvent());
+            multiButton.setTextLine3(planning.getNomSalle());
+            multiButton.setTextLine2(planning.getDate()+ "");
+         //   multiButton.setTextLine5();
             multiButton.setUIID(planning.getId() + "");
             multiButton.addActionListener(l -> new AdminEditPlanning(current, planning).show());
             container.add(multiButton);

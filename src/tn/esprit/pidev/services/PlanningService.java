@@ -6,6 +6,9 @@ import tn.esprit.pidev.entities.Planning;
 import tn.esprit.pidev.utils.Database;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,10 +54,15 @@ public class PlanningService {
 
             List<Map<String, Object>> list = (List<Map<String, Object>>) planningListJson.get("root");
             for (Map<String, Object> obj : list) {
-                Planning planning = new Planning((int) Float.parseFloat(obj.get("id").toString()),obj.get("typeEvent").toString() ,obj.get("titreEvent").toString(),obj.get("nomSalle").toString());
+                System.out.println(obj.get("heureDebut").toString().substring(11,16));
+                Time heureDebut = new Time(new SimpleDateFormat("hh:mm:ss").parse(obj.get("heureDebut").toString().substring(11, 19)).getTime());
+                Time heureFin = new Time(new SimpleDateFormat("hh:mm:ss").parse(obj.get("heureFin").toString().substring(11, 19)).getTime());
+                System.out.println(heureFin+"");
+                java.sql.Date date = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(obj.get("date").toString().substring(0,10)).getTime());
+                Planning planning = new Planning((int) Float.parseFloat(obj.get("id").toString()),obj.get("titreEvent").toString(),obj.get("typeEvent").toString() ,obj.get("nomSalle").toString(), date, heureDebut, heureFin);
                 planningArrayList.add(planning);
             }
-        } catch (IOException ex) {
+        } catch (IOException | ParseException ex) {
         }
         return planningArrayList;
     }
