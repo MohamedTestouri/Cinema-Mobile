@@ -19,7 +19,7 @@ public class AdminEditSpectacle extends Form {
         TextField imageTextField= new TextField(spectacle.getImage(), "Image");
         Picker datePicker = new Picker();
         datePicker.setType(Display.PICKER_TYPE_DATE);
-        datePicker.setDate(new Date());
+        datePicker.setDate(spectacle.getDate());
         Button editButton = new Button("Edit The Show");
         Button deleteButton = new Button("Delete The Show");
         editButton.addActionListener(l->{
@@ -27,7 +27,11 @@ public class AdminEditSpectacle extends Form {
                 Dialog.show("Alert", "Please fill all the fields", new Command("OK"));
             }else {
                // Spectacle spectacle = new Spectacle(titreTextField.getText(), datePicker.getDate(), genreTextField.getText(), imageTextField.getText());
-                System.out.println(datePicker.getDate().toString());
+                spectacle.setTitre(titreTextField.getText());
+                spectacle.setGenre(genreTextField.getText());
+                spectacle.setImage(imageTextField.getText());
+                spectacle.setDate((java.sql.Date) datePicker.getDate());
+
                 previous.showBack();
             }
         });

@@ -6,6 +6,7 @@ import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.plaf.UIManager;
 import tn.esprit.pidev.entities.Planning;
 import tn.esprit.pidev.services.PlanningService;
 
@@ -35,10 +36,10 @@ public class AdminListPlanningForm extends Form {
 
         //TOOLBAR BUTTONS
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
-        getToolbar().addCommandToOverflowMenu("Add", null, (evt) -> {
+        getToolbar().addCommandToOverflowMenu("Add", FontImage.createMaterial(FontImage.MATERIAL_ADD, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
             new AdminAddPlanning(current).show();
         });
-        getToolbar().addCommandToOverflowMenu("Refresh", null, (evt) -> {
+        getToolbar().addCommandToOverflowMenu("Refresh", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
             //  new AdminListSpectacleForm(current).show();
         });
 

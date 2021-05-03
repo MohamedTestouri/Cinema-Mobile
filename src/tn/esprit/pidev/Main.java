@@ -46,7 +46,7 @@ public class Main {
     }
 
     public void start() {
-        new ClientHomeScreen().show();
+        new AdminHomeScreen().show();
     }
 
     public void stop() {

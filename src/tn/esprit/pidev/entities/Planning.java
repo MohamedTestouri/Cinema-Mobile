@@ -1,7 +1,7 @@
 package tn.esprit.pidev.entities;
 
-import java.sql.Date;
 import java.sql.Time;
+import java.sql.Date;
 
 public class Planning {
     private int id;

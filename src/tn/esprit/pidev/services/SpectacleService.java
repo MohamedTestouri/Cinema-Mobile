@@ -6,6 +6,9 @@ import tn.esprit.pidev.entities.Spectacle;
 import tn.esprit.pidev.utils.Database;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,10 +66,11 @@ public class SpectacleService {
 
             List<Map<String,Object>> list = (List<Map<String,Object>>)spectacleListJson.get("root");
             for(Map<String,Object> obj : list){
-                Spectacle spectacle = new Spectacle( (int) Float.parseFloat(obj.get("id").toString()), obj.get("titre").toString(), obj.get("genre").toString(), obj.get("imagePath").toString());
+                java.sql.Date date = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(obj.get("date").toString().substring(0,10)).getTime());
+                Spectacle spectacle = new Spectacle( (int) Float.parseFloat(obj.get("id").toString()), obj.get("titre").toString(), date ,obj.get("genre").toString(), obj.get("imagePath").toString());
                 spectacleArrayList.add(spectacle);
             }
-        } catch (IOException ex) {
+        } catch (IOException | ParseException ex) {
         }
         return spectacleArrayList;
     }

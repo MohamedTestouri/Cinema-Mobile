@@ -3,6 +3,7 @@ package tn.esprit.pidev.views;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.plaf.UIManager;
 import tn.esprit.pidev.entities.Spectacle;
 import tn.esprit.pidev.services.SpectacleService;
 
@@ -27,7 +28,7 @@ public class AdminListSpectacleForm extends Form {
             Image image = URLImage.createToStorage(encImage, spectacle.getTitre() + spectacle.getId(), spectacle.getImage(), URLImage.RESIZE_SCALE_TO_FILL);
             MultiButton multiButton = new MultiButton(spectacle.getTitre() + "");
             multiButton.setTextLine2(spectacle.getGenre() + "");
-//multiButton.setTextLine3(spectacle.getDate());
+multiButton.setTextLine3(spectacle.getDate()+"");
             multiButton.setIcon(image);
             multiButton.setUIID(spectacle.getId() + "");
             multiButton.addActionListener(l -> new AdminEditSpectacle(current, spectacle).show());
@@ -40,10 +41,10 @@ public class AdminListSpectacleForm extends Form {
         //TOOLBAR BUTTONS
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
 
-        getToolbar().addCommandToOverflowMenu("Add", null, (evt) -> {
+        getToolbar().addCommandToOverflowMenu("Add", FontImage.createMaterial(FontImage.MATERIAL_ADD, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
             new AdminAddSpectacle(current).show();
         });
-        getToolbar().addCommandToOverflowMenu("Refresh", null, (evt) -> {
+        getToolbar().addCommandToOverflowMenu("Refresh", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
           //  new AdminListSpectacleForm(current).show();
         });
     }
