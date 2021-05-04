@@ -6,6 +6,7 @@ import com.codename1.ui.Component;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.plaf.UIManager;
 import tn.esprit.pidev.entities.Planning;
 import tn.esprit.pidev.services.PlanningService;
 
@@ -23,12 +24,16 @@ public class ClientOrderedListPlanningForm extends Form {
 
         planningArrayList = planningService.showOrdered();
 
-        Button allButton = new Button("Display All");
-        allButton.addActionListener(l -> new ClientListPlanningForm(null).show());
-        add(allButton);
 
-        showList();
-
+        for (Planning planning : planningArrayList) {
+            MultiButton multiButton = new MultiButton();
+            multiButton.setTextLine1(planning.getTitreEvent());
+            multiButton.setTextLine2(planning.getTypeEvent());
+            multiButton.setTextLine3(planning.getNomSalle());
+            multiButton.setUIID(planning.getId() + "");
+            multiButton.addActionListener(l -> new ClientShowPlanning(current, planning).show());
+            add(multiButton);
+        }
         getToolbar().addSearchCommand(e -> {
             String text = (String) e.getSource();
             if (text == null || text.length() == 0) {
@@ -55,18 +60,8 @@ public class ClientOrderedListPlanningForm extends Form {
         }, 4);
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ClientHomeScreen().showBack());
 
-    }
-
-    private void showList() {
-        for (Planning planning : planningArrayList) {
-            MultiButton multiButton = new MultiButton();
-            multiButton.setTextLine1(planning.getTitreEvent());
-            multiButton.setTextLine2(planning.getTypeEvent());
-            multiButton.setTextLine3(planning.getNomSalle());
-            multiButton.setUIID(planning.getId() + "");
-            multiButton.addActionListener(l -> new ClientShowPlanning(current, planning).show());
-            // container.add(multiButton);
-            add(multiButton);
-        }
+        getToolbar().addCommandToOverflowMenu("Shuffle", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
+            new ClientListPlanningForm(null).show();
+        });
     }
 }

@@ -81,12 +81,8 @@ public class AdminAddPlanning extends Form {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            //  previous.showBack();
-
         });
         addAll(titrePicker, typePicker, sallePicker, datePicker, heureDebutPicker, heureFinPicker, addButton);
-
-//Back Button
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
     }
 }

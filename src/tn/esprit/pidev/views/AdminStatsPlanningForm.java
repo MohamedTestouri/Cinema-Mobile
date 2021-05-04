@@ -13,8 +13,6 @@ import tn.esprit.pidev.entities.Planning;
 import tn.esprit.pidev.services.PlanningService;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ForkJoinPool;
 
 public class AdminStatsPlanningForm extends Form {
     Form current;
@@ -28,16 +26,10 @@ public class AdminStatsPlanningForm extends Form {
         int movieNumber = 0;
 
         ArrayList<Planning> planningArrayList = planningService.showAll();
-        ;
+
         for (Planning planning : planningArrayList) {
-            if (planning.getTypeEvent().equals("Spectacle")) {
-                showNumber++;
-            /*else if(planning.getTypeEvent().equals("Film")){
-                movieNumber++;
-            }*/
-            } else {
-                movieNumber++;
-            }
+            if (planning.getTypeEvent().equals("Spectacle")) showNumber++;
+            else movieNumber++;
         }
 
         double[] values = new double[]{showNumber, movieNumber};
@@ -66,7 +58,7 @@ public class AdminStatsPlanningForm extends Form {
 
     private DefaultRenderer buildCategoryRenderer(int[] colors) {
         DefaultRenderer renderer = new DefaultRenderer();
-        renderer.setLabelsTextSize(48  );
+        renderer.setLabelsTextSize(48);
         //renderer.setLegendTextSize(64);
         renderer.setLabelsColor(ColorUtil.BLUE);
         renderer.setAxesColor(ColorUtil.BLUE);

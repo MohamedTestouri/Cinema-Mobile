@@ -15,10 +15,12 @@ public class AdminHomeScreen extends Form {
         add(new Label("Choose an option"));
         Button listSpectacleButton = new Button("Shows");
         Button planningButton = new Button("Planning");
+        Button statButton = new Button("Statistique");
 
+        statButton.addActionListener(e -> new ClientListPlanningForm(current).show());
         listSpectacleButton.addActionListener(e-> new AdminListSpectacleForm(current).show());
         planningButton.addActionListener(e-> new AdminListPlanningForm(current).show());
-        addAll(listSpectacleButton,planningButton);
+        addAll(listSpectacleButton,planningButton, statButton);
 
         //SIDE MENU
         getToolbar().addCommandToLeftSideMenu("", null, (evt) -> {

@@ -1,20 +1,15 @@
 package tn.esprit.pidev;
 
-/* TO ADD TONIGHT
+/*
+MUST DO:
+Upload image
+upload image from url (Optional)
 
-Recherche Planning + DONE
-Recherche Shows + DONE
-Upload image (search)
-Pie chart plannig type ++  DONE
-Order Plannig ++ DONE
-Order Shows ++ DONE
-upload image from url (*)
- */
-
-/* TO FIX NOW
-edit & add webservice + |handling some errors
-change type to dropdownbox ++
-Refresh -
+MUST FIX:
+issues with add/edit planning (doesnt work yet)
+issues with edit spectacle (parsing exception)
+change title picker values when type picker data is selected in add and edit planning
+Refresh
  */
 import static com.codename1.ui.CN.*;
 
@@ -61,7 +56,7 @@ public class Main {
     }
 
     public void start() {
-        new AdminHomeScreen().show();
+        new ClientHomeScreen().show();
     }
 
     public void stop() {

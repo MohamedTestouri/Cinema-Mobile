@@ -3,6 +3,7 @@ package tn.esprit.pidev.views;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
+import com.codename1.ui.plaf.UIManager;
 import tn.esprit.pidev.entities.Spectacle;
 import tn.esprit.pidev.services.SpectacleService;
 
@@ -18,11 +19,24 @@ public class ClientOrderedListSpectacleForm extends Form {
         setTitle("Spectacle List");
         setLayout(BoxLayout.y());
         spectacleArrayList = spectacleService.showOrdered();
-        Button allButton = new Button("Display All");
-        allButton.addActionListener(l ->
-                new ClientListSpectacleForm(null).showBack());
-        add(allButton);
-        showList();
+
+        for (Spectacle spectacle : spectacleArrayList) {
+            //LOAD IMAGE
+            int deviceWidth = Display.getInstance().getDisplayWidth();
+            Image placeholder = Image.createImage(deviceWidth / 3, deviceWidth / 4, 0xbfc9d2);
+            EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
+            Image image = URLImage.createToStorage(encImage, spectacle.getTitre() + spectacle.getId(), spectacle.getImage(), URLImage.RESIZE_SCALE);
+            MultiButton multiButton = new MultiButton();
+            multiButton.setTextLine1(spectacle.getTitre() + "");
+            multiButton.setTextLine2(spectacle.getGenre() + "");
+//multiButton.setTextLine3(spectacle.getDate());
+            multiButton.setIcon(image);
+            multiButton.setUIID(spectacle.getId() + "");
+            multiButton.addActionListener(l -> new ClientShowSpectacle(current, spectacle).show());
+            // container.add(imageViewer);
+            add(multiButton);
+
+        }
         getToolbar().addSearchCommand(e -> {
             String text = (String) e.getSource();
             if (text == null || text.length() == 0) {
@@ -49,26 +63,9 @@ public class ClientOrderedListSpectacleForm extends Form {
         }, 4);
         //Back Button
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ClientHomeScreen().showBack());
-
+        getToolbar().addCommandToOverflowMenu("shuffle", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
+            new ClientListSpectacleForm(null).showBack();
+        });
     }
 
-    public void showList() {
-        for (Spectacle spectacle : spectacleArrayList) {
-            //LOAD IMAGE
-            int deviceWidth = Display.getInstance().getDisplayWidth();
-            Image placeholder = Image.createImage(deviceWidth / 3, deviceWidth / 4, 0xbfc9d2);
-            EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
-            Image image = URLImage.createToStorage(encImage, spectacle.getTitre() + spectacle.getId(), spectacle.getImage(), URLImage.RESIZE_SCALE);
-            MultiButton multiButton = new MultiButton();
-            multiButton.setTextLine1(spectacle.getTitre() + "");
-            multiButton.setTextLine2(spectacle.getGenre() + "");
-//multiButton.setTextLine3(spectacle.getDate());
-            multiButton.setIcon(image);
-            multiButton.setUIID(spectacle.getId() + "");
-            multiButton.addActionListener(l -> new ClientShowSpectacle(current, spectacle).show());
-            // container.add(imageViewer);
-            add(multiButton);
-
-        }
-    }
 }

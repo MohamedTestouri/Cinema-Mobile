@@ -32,9 +32,11 @@ public class AdminEditSpectacle extends Form {
                // Spectacle spectacle = new Spectacle(titreTextField.getText(), datePicker.getDate(), genreTextField.getText(), imageTextField.getText());
 
                 try {
-                    java.util.Calendar calendar = java.util.Calendar.getInstance();
-                    calendar.setTime(new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy").parse(datePicker.getDate() + ""));
-                    java.sql.Date date = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(calendar.get(java.util.Calendar.YEAR) + "-" + (calendar.get(java.util.Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DATE)).getTime());
+                    System.out.println(datePicker.getDate() + "");
+                    //java.util.Calendar calendar = java.util.Calendar.getInstance();
+                    //calendar.setTime(new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy").parse(datePicker.getDate() + ""));
+                   // java.sql.Date date = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(calendar.get(java.util.Calendar.YEAR) + "-" + (calendar.get(java.util.Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DATE)).getTime());
+                    java.sql.Date date = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(datePicker.getDate() + "").getTime());
                     spectacle.setTitre(titreTextField.getText());
                     spectacle.setGenre(genreTextField.getText());
                     spectacle.setImage(imageTextField.getText());

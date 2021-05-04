@@ -22,10 +22,19 @@ public class ClientListSpectacleForm extends Form {
         setLayout(BoxLayout.y());
         spectacleArrayList = spectacleService.showAll();
         Collections.reverse(spectacleArrayList);
-        Button dateOrderButton = new Button("Date");
-        dateOrderButton.addActionListener(l -> new ClientOrderedListSpectacleForm(null).show());
-        add(dateOrderButton);
-        showList();
+        for (Spectacle spectacle : spectacleArrayList) {
+            int deviceWidth = Display.getInstance().getDisplayWidth();
+            Image placeholder = Image.createImage(deviceWidth / 3, deviceWidth / 4, 0xbfc9d2);
+            EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
+            Image image = URLImage.createToStorage(encImage, spectacle.getTitre() + spectacle.getId(), spectacle.getImage(), URLImage.RESIZE_SCALE);
+            MultiButton multiButton = new MultiButton();
+            multiButton.setTextLine1(spectacle.getTitre() + "");
+            multiButton.setTextLine2(spectacle.getGenre() + "");
+            multiButton.setIcon(image);
+            multiButton.setUIID(spectacle.getId() + "");
+            multiButton.addActionListener(l -> new ClientShowSpectacle(current, spectacle).show());
+            add(multiButton);
+        }
         getToolbar().addSearchCommand(e -> {
             String text = (String) e.getSource();
             if (text == null || text.length() == 0) {
@@ -51,23 +60,10 @@ public class ClientListSpectacleForm extends Form {
             }
         }, 4);
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ClientHomeScreen().showBack());
-
+        getToolbar().addCommandToOverflowMenu("Date order", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
+            new ClientOrderedListSpectacleForm(null).show();
+        });
     }
 
-    public void showList() {
-        for (Spectacle spectacle : spectacleArrayList) {
-            int deviceWidth = Display.getInstance().getDisplayWidth();
-            Image placeholder = Image.createImage(deviceWidth / 3, deviceWidth / 4, 0xbfc9d2);
-            EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
-            Image image = URLImage.createToStorage(encImage, spectacle.getTitre() + spectacle.getId(), spectacle.getImage(), URLImage.RESIZE_SCALE);
-            MultiButton multiButton = new MultiButton();
-            multiButton.setTextLine1(spectacle.getTitre() + "");
-            multiButton.setTextLine2(spectacle.getGenre() + "");
-            multiButton.setIcon(image);
-            multiButton.setUIID(spectacle.getId() + "");
-            multiButton.addActionListener(l -> new ClientShowSpectacle(current, spectacle).show());
-            add(multiButton);
-            this.setScrollableY(true);
-        }
-    }
+
 }

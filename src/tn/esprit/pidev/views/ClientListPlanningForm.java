@@ -19,14 +19,16 @@ public class ClientListPlanningForm extends Form {
         setTitle("Planning List");
         setLayout(BoxLayout.y());
         planningArrayList = planningService.showAll();
-        Button typeOrderButton = new Button("type");
-        typeOrderButton.addActionListener(l ->
-                new ClientOrderedListPlanningForm(null).show());
-        add(typeOrderButton);
-        //Container container = new Container(BoxLayout.y());
-        //container.setScrollableY(true);
-        showList();
-
+        for (Planning planning : planningArrayList) {
+            MultiButton multiButton = new MultiButton();
+            multiButton.setTextLine1(planning.getTitreEvent());
+            multiButton.setTextLine2(planning.getTypeEvent());
+            multiButton.setTextLine3(planning.getNomSalle());
+            multiButton.setUIID(planning.getId() + "");
+            multiButton.addActionListener(l -> new ClientShowPlanning(current, planning).show());
+            // container.add(multiButton);
+            add(multiButton);
+        }
         // add(container);
         getToolbar().addSearchCommand(e -> {
             String text = (String) e.getSource();
@@ -54,19 +56,8 @@ public class ClientListPlanningForm extends Form {
         }, 4);
         //Back Button
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ClientHomeScreen().showBack());
-
-    }
-
-    private void showList() {
-        for (Planning planning : planningArrayList) {
-            MultiButton multiButton = new MultiButton();
-            multiButton.setTextLine1(planning.getTitreEvent());
-            multiButton.setTextLine2(planning.getTypeEvent());
-            multiButton.setTextLine3(planning.getNomSalle());
-            multiButton.setUIID(planning.getId() + "");
-            multiButton.addActionListener(l -> new ClientShowPlanning(current, planning).show());
-            // container.add(multiButton);
-            add(multiButton);
-        }
+        getToolbar().addCommandToOverflowMenu("Type Order", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
+            new ClientOrderedListPlanningForm(null).show();
+        });
     }
 }
