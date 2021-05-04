@@ -1,30 +1,27 @@
 package tn.esprit.pidev.views;
 
-import com.codename1.components.ImageViewer;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.*;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.plaf.UIManager;
 import tn.esprit.pidev.entities.Spectacle;
 import tn.esprit.pidev.services.SpectacleService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class ClientListSpectacleForm extends Form {
+public class ClientOrderedListSpectacleForm extends Form {
     Form current;
     SpectacleService spectacleService = new SpectacleService();
     ArrayList<Spectacle> spectacleArrayList = new ArrayList<>();
 
-    public ClientListSpectacleForm(Form previous) {
+    public ClientOrderedListSpectacleForm(Form previous) {
         current = this;
         setTitle("Spectacle List");
         setLayout(BoxLayout.y());
-        spectacleArrayList = spectacleService.showAll();
-        Collections.reverse(spectacleArrayList);
-        Button dateOrderButton = new Button("Date");
-        dateOrderButton.addActionListener(l -> new ClientOrderedListSpectacleForm(null).show());
-        add(dateOrderButton);
+        spectacleArrayList = spectacleService.showOrdered();
+        Button allButton = new Button("Display All");
+        allButton.addActionListener(l ->
+                new ClientListSpectacleForm(null).showBack());
+        add(allButton);
         showList();
         getToolbar().addSearchCommand(e -> {
             String text = (String) e.getSource();
@@ -50,12 +47,14 @@ public class ClientListSpectacleForm extends Form {
                 getContentPane().animateLayout(150);
             }
         }, 4);
+        //Back Button
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ClientHomeScreen().showBack());
 
     }
 
     public void showList() {
         for (Spectacle spectacle : spectacleArrayList) {
+            //LOAD IMAGE
             int deviceWidth = Display.getInstance().getDisplayWidth();
             Image placeholder = Image.createImage(deviceWidth / 3, deviceWidth / 4, 0xbfc9d2);
             EncodedImage encImage = EncodedImage.createFromImage(placeholder, false);
@@ -63,11 +62,13 @@ public class ClientListSpectacleForm extends Form {
             MultiButton multiButton = new MultiButton();
             multiButton.setTextLine1(spectacle.getTitre() + "");
             multiButton.setTextLine2(spectacle.getGenre() + "");
+//multiButton.setTextLine3(spectacle.getDate());
             multiButton.setIcon(image);
             multiButton.setUIID(spectacle.getId() + "");
             multiButton.addActionListener(l -> new ClientShowSpectacle(current, spectacle).show());
+            // container.add(imageViewer);
             add(multiButton);
-            this.setScrollableY(true);
+
         }
     }
 }

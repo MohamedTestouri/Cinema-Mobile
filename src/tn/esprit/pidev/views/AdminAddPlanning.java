@@ -1,19 +1,27 @@
 package tn.esprit.pidev.views;
 
-import com.codename1.ui.*;
+import com.codename1.ui.Button;
+import com.codename1.ui.Display;
+import com.codename1.ui.FontImage;
+import com.codename1.ui.Form;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.spinner.Picker;
 import tn.esprit.pidev.entities.Planning;
+import tn.esprit.pidev.services.PlanningService;
 import tn.esprit.pidev.services.SalleService;
 import tn.esprit.pidev.services.SpectacleService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AdminAddPlanning extends Form {
 
     SpectacleService spectacleService = new SpectacleService();
     SalleService salleService = new SalleService();
+    PlanningService planningService = new PlanningService();
 
     public AdminAddPlanning(Form previous) {
         setTitle("Add a Planning");
@@ -30,7 +38,11 @@ public class AdminAddPlanning extends Form {
         titrePicker.setStrings(titreData);
         titrePicker.setSelectedString(titreData[0]); //GET THE FIRST ELEMENT
 
-        TextField typeTextField = new TextField("", "Type Event");
+        //PICKER TYPE
+        Picker typePicker = new Picker();
+        typePicker.setType(Display.PICKER_TYPE_STRINGS);
+        typePicker.setStrings("Spectacle", "Film");
+        typePicker.setSelectedString("Spectacle");
 
         // FILL THE PICKER WITH SALLE NAME
         String[] salleNameData = new String[salleService.showAll().size()];
@@ -54,15 +66,25 @@ public class AdminAddPlanning extends Form {
         heureFinPicker.setTime(10 * 60);
         Button addButton = new Button("Add Planning");
         addButton.addActionListener(l -> {
-            if (typeTextField.getText().length() == 0) {
-                Dialog.show("Alert", "Please fill all the fields", new Command("OK"));
-            } else {
-                //  Spectacle spectacle = new Spectacle(titreTextField.getText(), datePicker.getDate(), genreTextField.getText(), imageTextField.getText());
-                //  System.out.println(datePicker.getDate());
-                previous.showBack();
+            Planning planning = new Planning();
+            try {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy").parse(datePicker.getDate() + ""));
+                planning.setDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DATE)).getTime()));
+                planning.setHeureDebut(new java.sql.Time(new SimpleDateFormat("HH:mm").parse(heureDebutPicker.getTime() / 60 + ":" + heureDebutPicker.getTime() % 60).getTime()));
+                planning.setHeureFin(new java.sql.Time(new SimpleDateFormat("HH:mm").parse(heureFinPicker.getTime() / 60 + ":" + heureFinPicker.getTime() % 60).getTime()));
+                planning.setNomSalle(sallePicker.getSelectedString());
+                planning.setTypeEvent(typePicker.getSelectedString());
+                planning.setTitreEvent(titrePicker.getSelectedString());
+                  planningService.addPlanning(planning);
+                 previous.showBack();
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            //  previous.showBack();
+
         });
-        addAll(titrePicker, typeTextField, sallePicker, datePicker, heureDebutPicker, heureFinPicker, addButton);
+        addAll(titrePicker, typePicker, sallePicker, datePicker, heureDebutPicker, heureFinPicker, addButton);
 
 //Back Button
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());

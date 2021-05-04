@@ -11,6 +11,7 @@ import tn.esprit.pidev.entities.Planning;
 import tn.esprit.pidev.services.PlanningService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AdminListPlanningForm extends Form {
     Form current;
@@ -22,8 +23,7 @@ public class AdminListPlanningForm extends Form {
         setTitle("Planning List");
         setLayout(BoxLayout.y());
         planningArrayList = planningService.showAll();
-        Container container = new Container(BoxLayout.y());
-        container.setScrollableY(true);
+        Collections.reverse(planningArrayList);
         for (Planning planning : planningArrayList) {
             MultiButton multiButton = new MultiButton(planning.getTitreEvent() + "");
             multiButton.setTextLine4(planning.getTypeEvent());
@@ -32,9 +32,9 @@ public class AdminListPlanningForm extends Form {
          //   multiButton.setTextLine5();
             multiButton.setUIID(planning.getId() + "");
             multiButton.addActionListener(l -> new AdminEditPlanning(current, planning).show());
-            container.add(multiButton);
+add(multiButton);
         }
-        addAll(container);
+
 
         //TOOLBAR BUTTONS
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());

@@ -33,7 +33,10 @@ public class SpectacleService {
 
 
     public boolean addSpectacle(Spectacle spectacle){
-        String url = Database.BASE_URL  + "/" ; // Add Symfony URL here
+        String url = Database.BASE_URL  + "spectacle/api/add?titre="+spectacle.getTitre()+
+                "&genre="+spectacle.getGenre()+
+                "&img="+spectacle.getImage()+
+                "&date="+spectacle.getDate(); // Add Symfony URL here
         req.setUrl(url);
         req.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -76,6 +79,38 @@ public class SpectacleService {
     }
     public ArrayList<Spectacle> showAll(){
         String url = Database.BASE_URL+"spectacle/api/show"; // Add Symfony URL Here
+        req.setUrl(url);
+        req.setPost(false);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                spectacleArrayList = parseSpectacle(new String(req.getResponseData()));
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return spectacleArrayList;
+    }
+
+    public boolean editSpectacle(Spectacle spectacle) {
+            String url = Database.BASE_URL  + "spectacle/api/edit?titre="+spectacle.getTitre()+
+                    "&genre="+spectacle.getGenre()+
+                    "&img="+spectacle.getImage()+
+                    "&date="+spectacle.getDate(); // Add Symfony URL here
+            req.setUrl(url);
+            req.addResponseListener(new ActionListener<NetworkEvent>() {
+                @Override
+                public void actionPerformed(NetworkEvent evt) {
+                    resultOK = req.getResponseCode() == 200; //Code HTTP 200 OK
+                    req.removeResponseListener(this);
+                }
+            });
+            NetworkManager.getInstance().addToQueueAndWait(req);
+            return resultOK;
+    }
+
+    public ArrayList<Spectacle> showOrdered() {
+        String url = Database.BASE_URL+"spectacle/api/showOrdered"; // Add Symfony URL Here
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener(new ActionListener<NetworkEvent>() {

@@ -8,6 +8,7 @@ import tn.esprit.pidev.entities.Spectacle;
 import tn.esprit.pidev.services.SpectacleService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AdminListSpectacleForm extends Form {
     Form current;
@@ -19,8 +20,7 @@ public class AdminListSpectacleForm extends Form {
         setTitle("Show List");
         setLayout(BoxLayout.y());
         spectacleArrayList = spectacleService.showAll();
-        Container container = new Container(BoxLayout.y());
-        container.setScrollableY(true);
+        Collections.reverse(spectacleArrayList);
         for (Spectacle spectacle : spectacleArrayList) {
             int deviceWidth = Display.getInstance().getDisplayWidth();
             Image placeholder = Image.createImage(deviceWidth / 3, deviceWidth / 4, 0xbfc9d2);
@@ -28,15 +28,14 @@ public class AdminListSpectacleForm extends Form {
             Image image = URLImage.createToStorage(encImage, spectacle.getTitre() + spectacle.getId(), spectacle.getImage(), URLImage.RESIZE_SCALE_TO_FILL);
             MultiButton multiButton = new MultiButton(spectacle.getTitre() + "");
             multiButton.setTextLine2(spectacle.getGenre() + "");
-multiButton.setTextLine3(spectacle.getDate()+"");
+            multiButton.setTextLine3(spectacle.getDate() + "");
             multiButton.setIcon(image);
             multiButton.setUIID(spectacle.getId() + "");
             multiButton.addActionListener(l -> new AdminEditSpectacle(current, spectacle).show());
-            container.add(multiButton);
+        add(multiButton);
 
         }
 
-        addAll( container);
 
         //TOOLBAR BUTTONS
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
@@ -45,7 +44,7 @@ multiButton.setTextLine3(spectacle.getDate()+"");
             new AdminAddSpectacle(current).show();
         });
         getToolbar().addCommandToOverflowMenu("Refresh", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
-          //  new AdminListSpectacleForm(current).show();
+            //  new AdminListSpectacleForm(current).show();
         });
     }
 }

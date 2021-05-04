@@ -6,6 +6,9 @@ import com.codename1.ui.spinner.Picker;
 import tn.esprit.pidev.entities.Spectacle;
 import tn.esprit.pidev.services.SpectacleService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AdminEditSpectacle extends Form {
@@ -27,11 +30,20 @@ public class AdminEditSpectacle extends Form {
                 Dialog.show("Alert", "Please fill all the fields", new Command("OK"));
             }else {
                // Spectacle spectacle = new Spectacle(titreTextField.getText(), datePicker.getDate(), genreTextField.getText(), imageTextField.getText());
-                spectacle.setTitre(titreTextField.getText());
-                spectacle.setGenre(genreTextField.getText());
-                spectacle.setImage(imageTextField.getText());
-                spectacle.setDate((java.sql.Date) datePicker.getDate());
 
+                try {
+                    java.util.Calendar calendar = java.util.Calendar.getInstance();
+                    calendar.setTime(new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy").parse(datePicker.getDate() + ""));
+                    java.sql.Date date = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(calendar.get(java.util.Calendar.YEAR) + "-" + (calendar.get(java.util.Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DATE)).getTime());
+                    spectacle.setTitre(titreTextField.getText());
+                    spectacle.setGenre(genreTextField.getText());
+                    spectacle.setImage(imageTextField.getText());
+                    spectacle.setDate(date);
+                    spectacleService.editSpectacle(spectacle);
+                    previous.showBack();
+                }catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 previous.showBack();
             }
         });

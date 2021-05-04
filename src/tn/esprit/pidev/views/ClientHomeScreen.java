@@ -26,10 +26,10 @@ Form current;
 
         });
         getToolbar().addCommandToLeftSideMenu("Shows", null, (evt) -> {
-            new AdminListSpectacleForm(current).show();
+            new ClientListSpectacleForm(current).show();
         });
         getToolbar().addCommandToLeftSideMenu("Planning", null, (evt) -> {
-            new AdminListPlanningForm(current).show();
+            new ClientListPlanningForm(current).show();
         });
     }
 }

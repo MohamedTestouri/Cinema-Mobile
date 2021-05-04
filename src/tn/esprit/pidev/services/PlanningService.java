@@ -33,7 +33,30 @@ public class PlanningService {
 
 
     public boolean addPlanning(Planning planning) {
-        String url = Database.BASE_URL + "planning/api/add"; // Add Symfony URL here
+        String url = Database.BASE_URL + "planning/api/add?titre="+planning.getTitreEvent()+
+                "&type="+planning.getTypeEvent()+
+                "&salle="+planning.getNomSalle()+
+                "&date="+planning.getDate()+
+                "&heureDebut="+planning.getHeureDebut()+
+                "&heureFin="+planning.getHeureFin(); // Add Symfony URL here
+        req.setUrl(url);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                resultOK = req.getResponseCode() == 200; //Code HTTP 200 OK
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return resultOK;
+    }
+    public boolean editPlanning(Planning planning) {
+        String url = Database.BASE_URL + "planning/api/edit?titre="+planning.getTitreEvent()+
+                "&type="+planning.getTypeEvent()+
+                "&salle="+planning.getNomSalle()+
+                "&date="+planning.getDate()+
+                "&heureDebut="+planning.getHeureDebut()+
+                "&heureFin="+planning.getHeureFin(); // Add Symfony URL here
         req.setUrl(url);
         req.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -59,7 +82,7 @@ public class PlanningService {
                 Time heureFin = new Time(new SimpleDateFormat("hh:mm:ss").parse(obj.get("heureFin").toString().substring(11, 19)).getTime());
                 System.out.println(heureFin+"");
                 java.sql.Date date = new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(obj.get("date").toString().substring(0,10)).getTime());
-                Planning planning = new Planning((int) Float.parseFloat(obj.get("id").toString()),obj.get("titreEvent").toString(),obj.get("typeEvent").toString() ,obj.get("nomSalle").toString(), date, heureDebut, heureFin);
+                Planning planning = new Planning((int) Float.parseFloat(obj.get("id").toString()),obj.get("typeEvent").toString() ,obj.get("titreEvent").toString(),obj.get("nomSalle").toString(), date, heureDebut, heureFin);
                 planningArrayList.add(planning);
             }
         } catch (IOException | ParseException ex) {
@@ -81,6 +104,20 @@ public class PlanningService {
     }
     public ArrayList<Planning> showAll() {
         String url = Database.BASE_URL + "planning/api/show"; // Add Symfony URL Here
+        req.setUrl(url);
+        req.setPost(false);
+        req.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                planningArrayList = parsePlanning(new String(req.getResponseData()));
+                req.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(req);
+        return planningArrayList;
+    }
+    public ArrayList<Planning> showOrdered() {
+        String url = Database.BASE_URL + "planning/api/showOrdered"; // Add Symfony URL Here
         req.setUrl(url);
         req.setPost(false);
         req.addResponseListener(new ActionListener<NetworkEvent>() {

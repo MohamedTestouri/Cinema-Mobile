@@ -30,5 +30,8 @@ public class AdminHomeScreen extends Form {
         getToolbar().addCommandToLeftSideMenu("Planning", null, (evt) -> {
             new AdminListPlanningForm(current).show();
         });
+        getToolbar().addCommandToLeftSideMenu("Stats Planning", null, (evt) -> {
+            new AdminStatsPlanningForm(current).show();
+        });
     }
 }

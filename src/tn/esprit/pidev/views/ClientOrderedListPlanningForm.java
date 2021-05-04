@@ -1,33 +1,34 @@
 package tn.esprit.pidev.views;
 
 import com.codename1.components.MultiButton;
-import com.codename1.ui.*;
+import com.codename1.ui.Button;
+import com.codename1.ui.Component;
+import com.codename1.ui.FontImage;
+import com.codename1.ui.Form;
 import com.codename1.ui.layouts.BoxLayout;
-import com.codename1.ui.plaf.UIManager;
 import tn.esprit.pidev.entities.Planning;
 import tn.esprit.pidev.services.PlanningService;
 
 import java.util.ArrayList;
 
-public class ClientListPlanningForm extends Form {
+public class ClientOrderedListPlanningForm extends Form {
     Form current;
     PlanningService planningService = new PlanningService();
     ArrayList<Planning> planningArrayList = new ArrayList<>();
 
-    public ClientListPlanningForm(Form previous) {
+    public ClientOrderedListPlanningForm(Form previous) {
         current = this;
         setTitle("Planning List");
         setLayout(BoxLayout.y());
-        planningArrayList = planningService.showAll();
-        Button typeOrderButton = new Button("type");
-        typeOrderButton.addActionListener(l ->
-                new ClientOrderedListPlanningForm(null).show());
-        add(typeOrderButton);
-        //Container container = new Container(BoxLayout.y());
-        //container.setScrollableY(true);
+
+        planningArrayList = planningService.showOrdered();
+
+        Button allButton = new Button("Display All");
+        allButton.addActionListener(l -> new ClientListPlanningForm(null).show());
+        add(allButton);
+
         showList();
 
-        // add(container);
         getToolbar().addSearchCommand(e -> {
             String text = (String) e.getSource();
             if (text == null || text.length() == 0) {
@@ -52,7 +53,6 @@ public class ClientListPlanningForm extends Form {
                 getContentPane().animateLayout(150);
             }
         }, 4);
-        //Back Button
         getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new ClientHomeScreen().showBack());
 
     }

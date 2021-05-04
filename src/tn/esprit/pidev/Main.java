@@ -1,6 +1,21 @@
 package tn.esprit.pidev;
 
+/* TO ADD TONIGHT
 
+Recherche Planning + DONE
+Recherche Shows + DONE
+Upload image (search)
+Pie chart plannig type ++  DONE
+Order Plannig ++ DONE
+Order Shows ++ DONE
+upload image from url (*)
+ */
+
+/* TO FIX NOW
+edit & add webservice + |handling some errors
+change type to dropdownbox ++
+Refresh -
+ */
 import static com.codename1.ui.CN.*;
 
 import com.codename1.ui.Form;
