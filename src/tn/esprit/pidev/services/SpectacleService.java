@@ -93,7 +93,8 @@ public class SpectacleService {
     }
 
     public boolean editSpectacle(Spectacle spectacle) {
-            String url = Database.BASE_URL  + "spectacle/api/edit?titre="+spectacle.getTitre()+
+            String url = Database.BASE_URL  + "spectacle/api/edit?id="+spectacle.getId()+
+                    "titre="+spectacle.getTitre()+
                     "&genre="+spectacle.getGenre()+
                     "&img="+spectacle.getImage()+
                     "&date="+spectacle.getDate(); // Add Symfony URL here

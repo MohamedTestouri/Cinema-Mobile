@@ -51,7 +51,8 @@ public class PlanningService {
         return resultOK;
     }
     public boolean editPlanning(Planning planning) {
-        String url = Database.BASE_URL + "planning/api/edit?titre="+planning.getTitreEvent()+
+        String url = Database.BASE_URL + "planning/api/edit?id="+planning.getId()+
+                "titre="+planning.getTitreEvent()+
                 "&type="+planning.getTypeEvent()+
                 "&salle="+planning.getNomSalle()+
                 "&date="+planning.getDate()+
