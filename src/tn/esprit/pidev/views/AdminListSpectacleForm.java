@@ -32,19 +32,19 @@ public class AdminListSpectacleForm extends Form {
             multiButton.setIcon(image);
             multiButton.setUIID(spectacle.getId() + "");
             multiButton.addActionListener(l -> new AdminEditSpectacle(current, spectacle).show());
-        add(multiButton);
+            add(multiButton);
 
         }
 
-
         //TOOLBAR BUTTONS
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
+        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> new AdminHomeScreen().showBack());
 
         getToolbar().addCommandToOverflowMenu("Add", FontImage.createMaterial(FontImage.MATERIAL_ADD, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
             new AdminAddSpectacle(current).show();
         });
         getToolbar().addCommandToOverflowMenu("Refresh", FontImage.createMaterial(FontImage.MATERIAL_REFRESH, UIManager.getInstance().getComponentStyle("TitleCommand")), (evt) -> {
-            //  new AdminListSpectacleForm(current).show();
+           new    AdminListSpectacleForm(current).show();
+            //revalidate();
         });
     }
 }
